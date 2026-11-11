@@ -19,6 +19,10 @@ pre { font: 1.1rem/1.15 "Eniee Monad"; margin: 0; white-space: pre; overflow-x: 
 .set { font-size: 2.3rem; line-height: 1.2; word-break: break-all; }
 .note { opacity: .62; font-size: 1rem; }
 a { color: inherit; }
+/* the samples are yours to type in: a thin blue line round each, cyan under the hand */
+.ed { border: 1px solid #2f6fe0; border-radius: 4px; padding: .3em .5em; margin-left: -.5em; margin-right: -.5em; outline: none; caret-color: #2ee6ff; transition: border-color .12s; }
+.ed:hover, .ed:focus { border-color: #2ee6ff; }
+.verse.ed, .set.ed { white-space: pre-wrap; }
 </style>
 </head>
 <body>
@@ -27,20 +31,20 @@ a { color: inherit; }
 adria, <span class="slender">slender</span>, and <span class="monad">monad</span>.</p>
 
 <h2>Eniee adria</h2>
-<p class="verse">A wandering minstrel I --<br>
-A thing of shreds and patches,<br>
-Of ballads, songs and snatches,<br>
-And dreamy lullaby!</p>
+<div class="verse ed" spellcheck="false">A wandering minstrel I --
+A thing of shreds and patches,
+Of ballads, songs and snatches,
+And dreamy lullaby!</div>
 
 <h2 class="slender">Eniee slender</h2>
-<p class="verse slender">My catalogue is long,<br>
-Through every passion ranging,<br>
-And to your humours changing<br>
-I tune my supple song!</p>
+<div class="verse slender ed" spellcheck="false">My catalogue is long,
+Through every passion ranging,
+And to your humours changing
+I tune my supple song!</div>
 <p class="note">(W. S. Gilbert, The Mikado, 1885.)</p>
 
 <h2 class="monad">Eniee monad</h2>
-<pre>(define (sqrt x)
+<pre class="ed" spellcheck="false">(define (sqrt x)
   (define (good-enough? guess)
     (&lt; (abs (- (square guess) x)) 0.001))
   (define (improve guess)
@@ -52,8 +56,7 @@ I tune my supple song!</p>
   (sqrt-iter 1.0))</pre>
 
 <h2>Every character</h2>
-<p class="set">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789
-!"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\]^_`{|}~ ‘’“” ¡¿ ßæœøÆŒØ äöüÄÖÜ §¤¦ ΓΔΞΠΣΥΦΨΩ ↑↓ ı ȷ ´ˋˇ˘¯˚¸¨ ′ —</p>
+<div class="set ed" spellcheck="false">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 !"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\]^_`{|}~ ‘’“” ¡¿ ßæœøÆŒØ äöüÄÖÜ §¤¦ ΓΔΞΠΣΥΦΨΩ ↑↓ ı ȷ ´ˋˇ˘¯˚¸¨ ′ —</div>
 
 <h2>Two dashes</h2>
 <p>There is no en dash. Type two hyphens, or the en dash itself, and the font says something: <span style="font-size:2rem">--</span>
@@ -62,5 +65,23 @@ Three hyphens make the hyphen twice over: a---b.
 
 <p class="note">Norbert Schwarz's OCR-B in METAFONT (after Adrian Frutiger), cut again with a flat nib by User1 (silberpunkt) and eniamb, 2026.
 Free to use, change and pass on, without limitation; Eniee Monad's fallback glyphs from DejaVu Sans Mono keep the Bitstream Vera licence. <a href="https://github.com/silberpunkt/eniee">The repository</a></p>
+<script>
+// Every sample is editable in place, as plain text. On arrival the first one has the caret at its end, as if you had
+// just been typing there (not on touch screens, where it would throw up a keyboard unasked). A tab into any sample
+// lands at its end too; a click lands where you click.
+(function () {
+  var eds = document.querySelectorAll('.ed');
+  function toEnd(el) { var r = document.createRange(), s = window.getSelection(); r.selectNodeContents(el); r.collapse(false); s.removeAllRanges(); s.addRange(r); }
+  eds.forEach(function (el) {
+    el.contentEditable = 'plaintext-only';
+    if (el.contentEditable !== 'plaintext-only') {   // older browsers: editable, and pastes kept to plain text
+      el.contentEditable = 'true';
+      el.addEventListener('paste', function (e) { e.preventDefault(); document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text')); });
+    }
+    el.addEventListener('keyup', function (e) { if (e.key === 'Tab') toEnd(el); });
+  });
+  if (eds.length && !matchMedia('(pointer: coarse)').matches) { eds[0].focus({ preventScroll: true }); toEnd(eds[0]); }
+})();
+</script>
 </body>
 </html>
