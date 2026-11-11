@@ -1,0 +1,147 @@
+% eniee-adria.mf -- Eniee adria: Norbert Schwarz's OCR-B skeletons (ocrbmac.mf, ocrbdef.mf; Adrian Frutiger's design),
+% every character redrawn with a flat nib held at 40 degrees instead of OCR-B's round pen, and set proportionally:
+% each letter as wide as its own ink plus a modest, even sidebearing (the gentle herd; no tracking out).
+% Named by User1, 7 xi 2026 ("adria, in the sense of coastal beach"); cut by eniamb.
+% Schwarz: "you may freely use, modify, and/or distribute any of these files or the resulting fonts, without limitation."
+% The family: a small file sets weight (1 regular, 0.86 slender) and mono (0 proportional, 1 one width), then inputs this.
+if unknown weight: weight := 1; fi
+if unknown mono: mono := 0; fi
+if unknown cellf: cellf := 1; fi
+if unknown lnudge: lnudge := 0; fi   % the l's ink moved this many RCH right inside its width (slender: 2)
+if unknown famname: font_identifier:="ENIEEADRIA"; else: font_identifier:=famname; fi
+font_size 10pt#;
+designsize:=10;
+sharpedges  := 0; globalslant := 0; lightfactor := 0; negativ := 0; extraline := 0;
+input ocrbmac
+% the nib: thick across 1.35 of OCR-B's stroke (93 percent of the first cut, to let light pass), thin 0.34, at 40 degrees
+defaultpen := pencircle xscaled (weight * 1.35 * ocrb.penwidth * scalefak) yscaled (weight * 0.34 * ocrb.penwidth * scalefak) rotated 40;
+% proportional width: the ink's own bounding box, moved to a sidebearing of 0.55 of OCR-B's stroke each side
+side := 0.55 * ocrb.penwidth * scalefak;
+nudge := 0;   % the ink moved within its own width, sidebearings left uneven (the vertical bar uses it)
+half := 0.5 * weight * sqrt((1.35 * cosd 40) ** 2 + (0.34 * sind 40) ** 2) * ocrb.penwidth * scalefak;   % the nib's half-reach sideways
+def corrwidth expr wdth =
+  if (mono = 1) and (charcode <> 2) and (charcode <> 3):   % one width for every letter: a cell of cellf of OCR-B's, the letter centred in it
+    currentpicture := currentpicture shifted (-round(0.5 * (1 - cellf) * wdth), 0); charwd := cellf * wdth / pt; w := round(cellf * wdth);
+  elseif kx > 0:
+    xl := x1; xr := x1; for k := 2 step 1 until kx: if x[k] < xl: xl := x[k]; fi if x[k] > xr: xr := x[k]; fi endfor
+    xl := xl - half; xr := xr + half;
+    currentpicture := currentpicture shifted (round(side - xl + nudge), 0);
+    w := round(xr - xl + 2side);
+    charwd := (xr - xl + 2side) / pt;
+  else: charwd := 0.42wdth/pt; w := 0.42wdth; fi
+  h := wdth;
+enddef;
+input ocrbdef
+if mono = 0: font_normal_space 0.42 * SYMBWIDTH * ptscale; font_quad 0.84 * SYMBWIDTH * ptscale;   % a word space for a proportional face
+else: font_normal_space cellf * SYMBWIDTH * ptscale; font_quad cellf * SYMBWIDTH * ptscale; fi   % monad: a space is one cell
+% square dots, and a comma that is a square dot with a nib-drawn tail (User1: "squaredots, not roundies")
+def P(expr p) = ((p shifted (shiftfak, 0)) scaled scalefak) enddef;
+def sqdot(expr c, sz) = fill (unitsquare shifted (-0.5,-0.5)) scaled (sz * scalefak) shifted P(c); enddef;
+def tail(expr c) = pickup defaultpen; draw P(c + (0.55,-0.2)) {down} .. {dir 235} P(c + (-1.1,-3.6)); enddef;
+def punct(expr n, depth) =
+  beginchar(n, ocrb.width, ocrb.width, 0);
+  kx := 0; for q = PTS: kx := kx + 1; z[kx] = P(q); endfor
+  DRAW; corrwidth SYMBWIDTH;
+  if depth < 0: d := vround(-depth * scalefak); fi
+  endchar; enddef;
+DS := 2.4 * weight;
+IDOT := 2.2 * weight;   % the small dot: i, j, and the apostrophe's head share it (one rule)   % a dot's side, in OCR-B units
+% dots set along the nib: the i, the j and the colon (User1: "angled precisely inline with the nib"); the period stays square
+def rdot(expr c, sz) = fill (unitsquare shifted (-0.5,-0.5)) scaled (sz * scalefak) rotated 40 shifted P(c); enddef;
+% a smaller nib, for strokes that should concede a little (the k's leg, the 1's flag)
+def thin = pickup defaultpen scaled 0.82; enddef;
+def nib = pickup defaultpen; enddef;
+% the font's own letters, small, as a line of text inside a glyph (for the en slot, below)
+def msgline(expr str, ox, oy, sc) =
+  cx := ox;
+  for ii = 0 upto length str - 1:
+    cc := ASCII substring (ii, ii + 1) of str;
+    if cc = 32: cx := cx + 3.2 * sc;
+    elseif known o.i[cc]:
+      mn := infinity; mx := -infinity;
+      for jj = 1 upto o.i[cc]: if known o.s[cc][jj]: for kk = 0 upto length o.s[cc][jj]: xx := xpart point kk of o.s[cc][jj]; if xx < mn: mn := xx; fi if xx > mx: mx := xx; fi endfor fi endfor
+      for jj = 1 upto o.i[cc]: if known o.s[cc][jj]: draw P(((o.s[cc][jj] shifted (-mn, 0)) scaled sc) shifted (cx, oy)); fi endfor
+      cx := cx + (mx - mn + 2.4) * sc;
+    fi
+  endfor
+  if cx > msgw: msgw := cx; fi
+enddef;
+% no en dash, no em dash (User1): "--" gives the en slot, which says what it is; "---" gives a dash made twice
+ligtable "-": "-" =: oct"002";
+ligtable oct"002": "-" =: oct"003";
+for kkk:=0 step 1 until 144 :
+  if (kkk <> 96) and (kkk <> 54) and (kkk <> 57) and (kkk <> 39) and (kkk <> 44) and (kkk <> 46) and (kkk <> 58) and (kkk <> 59) and (kkk <> 105) and (kkk <> 106) and (kkk <> 107) and (kkk <> 49): makechar kkk; fi
+endfor
+def PTS = (-1.05,0.6), (1.05,2.7) enddef; def DRAW = sqdot((0,1.65), DS); enddef; punct(46, 0);
+def PTS = (-1.05,0.6), (1.05,8.8) enddef; def DRAW = rdot((0,1.65), DS); rdot((0,7.75), DS); enddef; punct(58, 0);
+def PTS = (-1.6,-2.6), (1.05,2.7) enddef; def DRAW = sqdot((0,1.65), DS); tail((0,1.65)); enddef; punct(44, -2.6);
+def PTS = (-1.6,-2.6), (1.05,8.8) enddef; def DRAW = sqdot((0,1.65), DS); tail((0,1.65)); rdot((0,7.75), DS); enddef; punct(59, -2.6);
+% i: its short spine carried half a stem to the left, the dot with it, set along the nib
+def PTS = (-2.3,0.65), (0,8.3), (-1.15,13.1), (0.4,13.1) enddef;
+def DRAW = nib; draw P((-2.3,8.3)--(0,8.3)--(0,0.65)); rdot((-0.375,12.25), IDOT); enddef; punct(105, 0);
+def PTS = (-1.8,-2.25), (0.75,8.3), (-0.3,13.1), (1.3,13.1) enddef;
+def DRAW = nib; draw P(o.s[106][2]); rdot((0.5,12.25), IDOT); enddef; punct(106, -2.25);
+% k: the leg curves a little, concave to the sky, and concedes a little weight
+def PTS = (-2.45,0.65), (-2.45,12.65), (3.05,0.65), (2.5,8.5) enddef;
+def DRAW = nib; draw P((-2.45,0.65)--(-2.45,12.65)); draw P((-2.45,5.15)--(-1.15,5.15)--(2.5,8.5));
+  thin; draw P((-1.15,5.15)..(0.75,2.5)..(3.05,0.65)); nib; enddef; punct(107, 0);
+% 1: the flag curves the same way, and concedes the same
+def PTS = (0.75,0.7), (0.75,12.6), (-2.95,9.9) enddef;
+def DRAW = nib; draw P((0.75,0.7)--(0.75,12.6)--(0.2,12.6)); thin; draw P((0.2,12.6)..(-1.45,10.85)..(-2.95,9.9)); nib; enddef; punct(49, 0);
+% the apostrophe (a foot-mark): mostly upright, slim, descending a little inward, toward the letter it follows
+% the hyphen comes in: three RCH at its left, two at its right (RCH: the least perceptible difference, taken as 0.35 unit)
+RCH := 0.35;
+o.s[45][1] := (-3.5 + 3RCH, 6.4)--(-3.5 + 3RCH, 6.9); o.s[45][2] := (-3.5 + 3RCH, 6.9)--(3.5 - 2RCH, 6.9);
+o.s[45][3] := (3.5 - 2RCH, 6.9)--(3.5 - 2RCH, 6.4);   o.s[45][4] := (3.5 - 2RCH, 6.4)--(-3.5 + 3RCH, 6.4);
+% ae, oe, AE, OE, interdesigned (User1, 7 xi 2026: the overlaid pairs were "calamitous"; they now share, not cover).
+% No stroke lies over another: where the two letters meet, one stroke serves both.
+%   ae  the a's stem is the e's left side: the e's bowl leaves the stem where the a's bowl comes into it
+%   oe  the o and the e touch at one point, two petals on one stem
+%   AE  the A's left leg climbs to the E's stem; the A's bar and the E's middle arm are one bar
+%   OE  the O's left half runs straight into the E's top and foot
+% Monad draws each pair narrower, so it keeps to its cell: the small pairs at 0.62 and with a nib 85% as wide (they
+% concede weight, as the k's leg does, so their counters stay open), the capitals at 0.68 and the full nib.
+fx := if mono = 1: 0.62 else: 1 fi;
+def pairpath(expr code, k, p) = o.s[code][k] := p xscaled fx; enddef;
+% ae: a moved left and e right by 3.05, so the a's stem (2.85) and the e's leftmost point (-3.25) both land at -0.2
+pairpath(26, 1, o.s[97][1] shifted (-3.05, 0)); pairpath(26, 2, o.s[97][2] shifted (-3.05, 0));
+pairpath(26, 3, o.s[101][1] shifted (3.05, 0)); o.i[26] := 3;
+% oe: the o's rightmost (3.5) and the e's leftmost (-3.25) meet at -0.125
+pairpath(27, 1, o.s[111][1] shifted (-3.375, 0)); pairpath(27, 2, o.s[101][1] shifted (3.375, 0)); o.i[27] := 2;
+fx := if mono = 1: 0.68 else: 1 fi;
+% AE: the A's leg climbs from wider out to the stem's top; one bar, lowered to 5.6 so the A keeps a counter; centred (-1.1)
+pairpath(29, 1, ((-4.4,0.7)--(0,11.4)--(6.6,11.4)) shifted (-1.1, 0));
+pairpath(29, 2, ((0.6,11.4)--(0.6,0.9)--(6.6,0.9)) shifted (-1.1, 0));
+pairpath(29, 3, ((-4.4 + 4.4 * 4.9 / 10.7, 5.6)--(5.75,5.6)) shifted (-1.1, 0)); o.i[29] := 3;
+% OE: the O's left half, from the E's top round to its foot; the stem at 0.9
+pairpath(30, 1, ((6.9,11.4)--(0.3,11.4){left}..(-2.75,9.5)..(-3.45,6.15){down}..(-2.75,2.8)..{right}(0.3,0.9)--(6.9,0.9)) shifted (-1.7, 0));
+pairpath(30, 2, ((0.9,11.4)--(0.9,0.9)) shifted (-1.7, 0));
+pairpath(30, 3, ((0.9,6.4)--(6.05,6.4)) shifted (-1.7, 0)); o.i[30] := 3;
+% the vertical bar presides: four RCH up (Old Glory: a flagpole must be well set). Across: first two RCH right, then
+% (7 xi, "two more RCH to the left") two back. In monad that puts it at OCR-B's own place; in the proportional cuts,
+% where each letter is centred in its own width, the ink is moved two RCH left inside its width instead.
+o.s[124][1] := (0, -1.95 + 4RCH)--(0, 12.65 + 4RCH); o.m[124] := -1.95 + 4RCH;
+pen savedpen; savedpen := defaultpen; if mono = 1: defaultpen := savedpen scaled 0.85; fi makechar 26; makechar 27; defaultpen := savedpen;
+makechar 29; makechar 30;
+if mono = 0: nudge := -2RCH * scalefak; fi makechar 124; nudge := 0;   % made again, now with the rules above
+% the l, as it is, carried lnudge RCH to the right inside its own width (User1, 7 xi, for slender: "teleport, 2rch to the right")
+if (mono = 0) and (lnudge <> 0): nudge := lnudge * RCH * scalefak; makechar 108; nudge := 0; fi
+% the clove: its diamond head shares its outer right bound with the descending mark (no indent at right)
+tailR := 0.3 + 0.82 * half / scalefak; dotX := tailR - 0.5 * (cosd 40 + sind 40) * IDOT;
+def PTS = (-0.9,8.0), (tailR,12.65) enddef; def DRAW = rdot((dotX,11.55), IDOT); thin; draw P((0.3,11.0){dir 262}..{dir 250}(-0.15,8.15)); nib; enddef; punct(39, 0);   % head: the i's dot; base: as it was
+% the turned clove, in the grave slot (where TeX looks for an opening quote): the clove turned half round
+def turned(expr p) = ((0.1, 10.4) * 2 - p) enddef;
+def PTS = turned((-0.9,8.0)), turned((tailR,12.65)) enddef;
+def DRAW = rdot(turned((dotX,11.55)), IDOT); thin; draw P(turned((0.3,11.0)){dir 82}..{dir 70}turned((-0.15,8.15))); nib; enddef; punct(96, 0);
+% 6 and 9: the stroke that enters the 6 and the tail that leaves the 9 concede, as the 1's flag and the k's leg do (one rule)
+def PTS = (-3.5,0.65), (3.5,12.6) enddef; def DRAW = thin; draw P(subpath (0, 2) of o.s[54][1]); nib; draw P(subpath (2, length o.s[54][1]) of o.s[54][1]); enddef; punct(54, 0);
+def PTS = (-3.5,0.7), (3.5,12.65) enddef; def DRAW = thin; draw P(subpath (0, 1) of o.s[57][1]); nib; draw P(subpath (1, length o.s[57][1]) of o.s[57][1]); enddef; punct(57, 0);
+% em, made of two dashes end to end, a little taller than one
+def PTS = (-3.5,6.1), (10.5,7.2) enddef; def DRAW = nib; draw P((-3.5,6.15)--(10.5,6.15)--(10.5,7.15)--(-3.5,7.15)--cycle); enddef; punct(3, 0);
+% en: a message within the font itself. The solidus is the line break.
+msgw := 0;
+def PTS = (0,1.4), (msgw,9.8) enddef;
+def DRAW = pickup defaultpen scaled 0.36; msgline("do not hide", 0, 6.0, 0.3); msgline("in typography.", 0, 1.6, 0.3); nib; enddef;
+beginchar(0, 1, 1, 0); DRAW; endchar; makechar 0;   % a dry run to learn the message width, then char 0 made again as OCR-B has it
+punct(2, 0);
+end.

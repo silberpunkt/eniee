@@ -1,0 +1,5 @@
+% eniee-monad.mf -- Eniee monad: one width for every letter, a cell 0.753 of OCR-B's: the mean of adria's and
+% slender's lowercase widths, so text runs as long as theirs on average. Nib at 0.963 (209 of 217). After Lettvin's
+% "Mortal neurons, immortal monads". Meant to stand where Iosevka stood.
+weight := 0.963; mono := 1; cellf := 0.753; string famname; famname := "ENIEEMONAD";
+input eniee-adria

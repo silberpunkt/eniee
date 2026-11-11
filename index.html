@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eniee</title>
+<style>
+@font-face { font-family: "Eniee Adria";   src: url(fonts/EnieeAdria-Regular.woff2) format("woff2"),   url(fonts/EnieeAdria-Regular.woff) format("woff"); }
+@font-face { font-family: "Eniee Slender"; src: url(fonts/EnieeSlender-Regular.woff2) format("woff2"), url(fonts/EnieeSlender-Regular.woff) format("woff"); }
+@font-face { font-family: "Eniee Monad";   src: url(fonts/EnieeMonad-Regular.woff2) format("woff2"),   url(fonts/EnieeMonad-Regular.woff) format("woff"); }
+html { background: #000; color: #fff; }
+body { margin: 0 auto; max-width: 52rem; padding: 3rem 1.5rem 5rem; font: 1.25rem/1.15 "Eniee Adria", monospace; }
+h1 { font-weight: normal; font-size: 4.5rem; line-height: 1; margin: 0 0 .2em; }
+h2 { font-weight: normal; font-size: 1.6rem; margin: 2.6rem 0 .6rem; }
+.slender { font-family: "Eniee Slender"; }
+.monad { font-family: "Eniee Monad"; }
+pre { font: 1.1rem/1.15 "Eniee Monad"; margin: 0; white-space: pre; overflow-x: auto; }
+.verse { font-size: 1.7rem; line-height: 1.12; }
+.set { font-size: 2.3rem; line-height: 1.2; word-break: break-all; }
+.note { opacity: .62; font-size: 1rem; }
+a { color: inherit; }
+</style>
+</head>
+<body>
+<h1>Eniee</h1>
+<p>OCR-B, drawn again with a flat nib held at forty degrees. Three cuts:
+adria, <span class="slender">slender</span>, and <span class="monad">monad</span>.</p>
+
+<h2>Eniee adria</h2>
+<p class="verse">A wandering minstrel I --<br>
+A thing of shreds and patches,<br>
+Of ballads, songs and snatches,<br>
+And dreamy lullaby!</p>
+
+<h2 class="slender">Eniee slender</h2>
+<p class="verse slender">My catalogue is long,<br>
+Through every passion ranging,<br>
+And to your humours changing<br>
+I tune my supple song!</p>
+<p class="note">(W. S. Gilbert, The Mikado, 1885.)</p>
+
+<h2 class="monad">Eniee monad</h2>
+<pre>(define (sqrt x)
+  (define (good-enough? guess)
+    (&lt; (abs (- (square guess) x)) 0.001))
+  (define (improve guess)
+    (average guess (/ x guess)))
+  (define (sqrt-iter guess)
+    (if (good-enough? guess)
+        guess
+        (sqrt-iter (improve guess))))
+  (sqrt-iter 1.0))</pre>
+
+<h2>Every character</h2>
+<p class="set">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789
+!"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\]^_`{|}~ ‘’“” ¡¿ ßæœøÆŒØ äöüÄÖÜ §¤¦ ΓΔΞΠΣΥΦΨΩ ↑↓ ı ȷ ´ˋˇ˘¯˚¸¨ ′ —</p>
+
+<h2>Two dashes</h2>
+<p>There is no en dash. Type two hyphens, or the en dash itself, and the font says something: <span style="font-size:2rem">--</span>
+Three hyphens make the hyphen twice over: a---b.
+(<span class="monad">font-variant-ligatures: none</span> turns the hyphen pairs back into hyphens.)</p>
+
+<p class="note">Norbert Schwarz's OCR-B in METAFONT (after Adrian Frutiger), cut again with a flat nib by User1 (silberpunkt) and eniamb, 2026.
+Free to use, change and pass on, without limitation; Eniee Monad's fallback glyphs from DejaVu Sans Mono keep the Bitstream Vera licence. <a href="https://github.com/silberpunkt/eniee">The repository</a></p>
+</body>
+</html>

@@ -1,0 +1,19 @@
+Eniee (Eniee Adria, Eniee Slender, Eniee Monad)
+
+The METAFONT for OCR-B on which these fonts are built:
+  Copyright 1995, 2010 Norbert Schwarz
+  You may freely use, modify, and/or distribute this file, without limitation.
+
+The Eniee changes (the flat nib, the redrawn characters, the family, the tools, the fonts made from them, and the
+characters made by program in tools/extras.py):
+  2026, User1 (silberpunkt) and eniamb
+  You may freely use, modify, and/or distribute these files and the resulting fonts, without limitation.
+
+Eniee Monad, from version 1.300, also carries fallback glyphs taken from DejaVu Sans Mono and scaled to its cell: every
+character DejaVu Sans Mono has that Eniee does not make itself (Greek, Cyrillic, mathematics, arrows, symbols and the
+rest). Those glyphs are under the Bitstream Vera licence (Copyright (c) 2003 by Bitstream, Inc.; DejaVu's changes are
+in the public domain), given in full in LICENSE-DejaVu.txt. In short: free to use, change and pass on; not to be sold
+by itself as a font; the notice kept; and the result not to be called Bitstream or Vera.
+
+OCR-B was designed by Adrian Frutiger (1968) and is standardized as ISO 1073-2.
+These files come without any warranty.

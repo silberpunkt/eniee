@@ -1,0 +1,3 @@
+% eniee-slender.mf -- Eniee adria, one shade lighter (the nib at 86%)
+weight := 0.86; mono := 0; string famname; famname := "ENIEESLENDER"; lnudge := 2;   % the l two RCH right (User1, 7 xi)
+input eniee-adria
