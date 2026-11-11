@@ -7,7 +7,7 @@
 # 4. build.py (fontTools) makes the CFF OpenType font, with TeX's dash ligatures, then WOFF and WOFF2.
 # The widths, the word space and the ligatures are METAFONT's own; only the outlines pass through tracing.
 set -e
-TOP=$(cd "$(dirname "$0")/.." && pwd); W=${TMPDIR:-/tmp}/eniee-build; QJS=${QJS:-qjs}; VER=${VER:-1.320}
+TOP=$(cd "$(dirname "$0")/.." && pwd); W=${TMPDIR:-/tmp}/eniee-build; QJS=${QJS:-qjs}; VER=${VER:-1.330}
 mkdir -p $W; cp $TOP/source/*.mf $W/; cd $W
 for f in eniee-adria eniee-slender eniee-monad; do
   mf "\\mode=ljfour; mag=8; nonstopmode; input $f" >/dev/null

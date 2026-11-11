@@ -124,6 +124,10 @@ o.s[124][1] := (0, -1.95 + 4RCH)--(0, 12.65 + 4RCH); o.m[124] := -1.95 + 4RCH;
 pen savedpen; savedpen := defaultpen; if mono = 1: defaultpen := savedpen scaled 0.85; fi makechar 26; makechar 27; defaultpen := savedpen;
 makechar 29; makechar 30;
 if mono = 0: nudge := -2RCH * scalefak; fi makechar 124; nudge := 0;   % made again, now with the rules above
+% the middle dot (User1, 11 xi 2026: "indispensable to classical carved typography"): the exclamation mark's own dot,
+% the same small square walked round by the nib and so lying at the nib's angle, lifted to the hyphen's height (6.65)
+for kkk := 1 upto 4: o.s[138][kkk] := o.s[33][kkk + 1] shifted (0, 6.65); endfor
+o.i[138] := 4; o.m[138] := 6.25; makechar 138;
 % the l, as it is, carried lnudge RCH to the right inside its own width (User1, 7 xi, for slender: "teleport, 2rch to the right")
 if (mono = 0) and (lnudge <> 0): nudge := lnudge * RCH * scalefak; makechar 108; nudge := 0; fi
 % the clove: its diamond head shares its outer right bound with the descending mark (no indent at right)
