@@ -39,7 +39,7 @@ body { font-family: "Eniee Adria", monospace; }
 - ‘ ’ “ ” ¡ ¿ ß æ œ ø Æ Œ Ø ä ö ü Ä Ö Ü § ¤ ¦ ı ȷ.
 - Γ Δ Ξ Π Σ Υ Φ Ψ Ω ↑ ↓.
 - The spacing accents ´ ˋ ˇ ˘ ¯ ˚ ¸ ¨ and a prime ′.
-- A middle dot · (from version 1.330): the exclamation mark's own dot, lying at the nib's angle, lifted to the hyphen's height. For inscriptions: SENATVS·POPVLVSQVE·ROMANVS.
+- A middle dot · (from version 1.330): the colon's dot, in single: a square set along the nib, its centre on the middle stroke of P and R. For inscriptions: SENATVS·POPVLVSQVE·ROMANVS.
 
 That is OCR-B's own repertoire, 138 characters, and the one dot more. There are no other accented letters yet: no é, å or ñ. METAFONT built each umlaut as a whole character. Making é and the rest means composing them from the letters and accents above, and that is still to do.
 

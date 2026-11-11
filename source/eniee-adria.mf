@@ -89,10 +89,14 @@ def DRAW = nib; draw P((-2.45,0.65)--(-2.45,12.65)); draw P((-2.45,5.15)--(-1.15
 def PTS = (0.75,0.7), (0.75,12.6), (-2.95,9.9) enddef;
 def DRAW = nib; draw P((0.75,0.7)--(0.75,12.6)--(0.2,12.6)); thin; draw P((0.2,12.6)..(-1.45,10.85)..(-2.95,9.9)); nib; enddef; punct(49, 0);
 % the apostrophe (a foot-mark): mostly upright, slim, descending a little inward, toward the letter it follows
-% the hyphen comes in: three RCH at its left, two at its right (RCH: the least perceptible difference, taken as 0.35 unit)
-RCH := 0.35;
-o.s[45][1] := (-3.5 + 3RCH, 6.4)--(-3.5 + 3RCH, 6.9); o.s[45][2] := (-3.5 + 3RCH, 6.9)--(3.5 - 2RCH, 6.9);
-o.s[45][3] := (3.5 - 2RCH, 6.9)--(3.5 - 2RCH, 6.4);   o.s[45][4] := (3.5 - 2RCH, 6.4)--(-3.5 + 3RCH, 6.4);
+RCH := 0.35;   % the least perceptible difference, taken as 0.35 unit
+% the hyphen (User1, 11 xi 2026: "too wide, by the margin of one dot. 86% of their width, balanced"): its ink, nib and all,
+% is 0.86 of OCR-B's, taken evenly from both ends. (An earlier rule, three RCH in at the left and two at the right, was
+% written here but never cut: the hyphen had already been made, above, and was not made again.)
+hyh := 0.5 * (0.86 * (7 + 2half / scalefak) - 2half / scalefak);
+o.s[45][1] := (-hyh, 6.4)--(-hyh, 6.9); o.s[45][2] := (-hyh, 6.9)--(hyh, 6.9);
+o.s[45][3] := (hyh, 6.9)--(hyh, 6.4);   o.s[45][4] := (hyh, 6.4)--(-hyh, 6.4);
+makechar 45;
 % ae, oe, AE, OE, interdesigned (User1, 7 xi 2026: the overlaid pairs were "calamitous"; they now share, not cover).
 % No stroke lies over another: where the two letters meet, one stroke serves both.
 %   ae  the a's stem is the e's left side: the e's bowl leaves the stem where the a's bowl comes into it
@@ -124,10 +128,9 @@ o.s[124][1] := (0, -1.95 + 4RCH)--(0, 12.65 + 4RCH); o.m[124] := -1.95 + 4RCH;
 pen savedpen; savedpen := defaultpen; if mono = 1: defaultpen := savedpen scaled 0.85; fi makechar 26; makechar 27; defaultpen := savedpen;
 makechar 29; makechar 30;
 if mono = 0: nudge := -2RCH * scalefak; fi makechar 124; nudge := 0;   % made again, now with the rules above
-% the middle dot (User1, 11 xi 2026: "indispensable to classical carved typography"): the exclamation mark's own dot,
-% the same small square walked round by the nib and so lying at the nib's angle, lifted to the hyphen's height (6.65)
-for kkk := 1 upto 4: o.s[138][kkk] := o.s[33][kkk + 1] shifted (0, 6.65); endfor
-o.i[138] := 4; o.m[138] := 6.25; makechar 138;
+% the middle dot (User1, 11 xi 2026: "indispensable to classical carved typography"): not a dot of its own but the colon's,
+% in single: the same square set along the nib, in the colon's width, its centre on the middle stroke of P and R (5.9)
+def PTS = (-1.05,4.85), (1.05,6.95) enddef; def DRAW = rdot((0,5.9), DS); enddef; punct(138, 0);
 % the l, as it is, carried lnudge RCH to the right inside its own width (User1, 7 xi, for slender: "teleport, 2rch to the right")
 if (mono = 0) and (lnudge <> 0): nudge := lnudge * RCH * scalefak; makechar 108; nudge := 0; fi
 % the clove: its diamond head shares its outer right bound with the descending mark (no indent at right)
@@ -141,7 +144,8 @@ def DRAW = rdot(turned((dotX,11.55)), IDOT); thin; draw P(turned((0.3,11.0)){dir
 def PTS = (-3.5,0.65), (3.5,12.6) enddef; def DRAW = thin; draw P(subpath (0, 2) of o.s[54][1]); nib; draw P(subpath (2, length o.s[54][1]) of o.s[54][1]); enddef; punct(54, 0);
 def PTS = (-3.5,0.7), (3.5,12.65) enddef; def DRAW = thin; draw P(subpath (0, 1) of o.s[57][1]); nib; draw P(subpath (1, length o.s[57][1]) of o.s[57][1]); enddef; punct(57, 0);
 % em, made of two dashes end to end, a little taller than one
-def PTS = (-3.5,6.1), (10.5,7.2) enddef; def DRAW = nib; draw P((-3.5,6.15)--(10.5,6.15)--(10.5,7.15)--(-3.5,7.15)--cycle); enddef; punct(3, 0);
+% (11 xi: it follows the hyphen: twice the new hyphen's length, so it narrows with it)
+def PTS = (-2hyh,6.1), (2hyh,7.2) enddef; def DRAW = nib; draw P((-2hyh,6.15)--(2hyh,6.15)--(2hyh,7.15)--(-2hyh,7.15)--cycle); enddef; punct(3, 0);
 % en: a message within the font itself. The solidus is the line break.
 msgw := 0;
 def PTS = (0,1.4), (msgw,9.8) enddef;
