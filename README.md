@@ -24,7 +24,7 @@ Norbert Schwarz put Adrian Frutiger's OCR-B into METAFONT in the 1980s. In his v
 
 ## Two dashes
 
-Eniee has no en dash. In its place is a message, set in the font's own letters: *do not hide / in typography.* You get it by typing two hyphens, as in TeX, or by typing the en dash (U+2013). Three hyphens give the hyphen made twice over, which is also the em dash (U+2014). Both come from the standard ligature feature, `liga`. To keep hyphen pairs as plain hyphens, turn ligatures off, e.g. `font-variant-ligatures: none` in CSS.
+Eniee has no en dash. In its place is a message, set in the font's own letters: *do not hide / in typography.* It answers only to the en dash itself, U+2013. The em dash, U+2014, is the hyphen made twice over. Two or three hyphens typed in a row stay hyphens, exactly as typed: the fonts have no ligatures, so nothing you write is changed behind your back. (In TeX, where `--` and `---` have always meant the dashes, the METAFONT source keeps them.)
 
 ## On the web
 

@@ -1,7 +1,7 @@
 # build.py -- an OpenType (CFF) font, and its WOFF and WOFF2, from trace.py's outlines. fontTools.
 #   python3 build.py glyphdir outdir "Family" "Style" weightclass mono(0/1) space version
 # The character slots are METAFONT's (OCR-B's own layout, which follows TeX's old text layout); the map below
-# gives each the Unicode it answers to. TeX's ligatures for dashes come along as OpenType 'liga':
+# gives each the Unicode it answers to. (TeX's dash ligatures stay in TeX; the OpenType fonts have none:)
 #   - -    the message, "do not hide / in typography." (slot 2; also U+2013, where an en dash would be)
 #   - - -  the hyphen made twice (slot 3; also U+2014)
 import sys, os, json
@@ -128,8 +128,8 @@ pan = Panose(); pan.bFamilyType = 2; pan.bProportion = 9 if mono else 0
 for k in ('bSerifStyle','bWeight','bContrast','bStrokeVariation','bArmStyle','bLetterForm','bMidline','bXHeight'): setattr(pan, k, 0)
 fb.font['OS/2'].panose = pan
 fb.setupPost(isFixedPitch=1 if mono else 0, underlinePosition=-100, underlineThickness=50)
-fea = 'languagesystem DFLT dflt;\nlanguagesystem latn dflt;\nfeature liga {\n  sub hyphen hyphen hyphen by emdash;\n  sub hyphen hyphen by endash;\n} liga;\n'
-addOpenTypeFeaturesFromString(fb.font, fea)
+# No ligatures (Poetas, 11 xi 2026): two hyphens stay two hyphens, as typed. TeX's -- and --- live on in the METAFONT
+# source for TeX; in the OpenType fonts the message and the doubled hyphen answer only to U+2013 and U+2014.
 os.makedirs(od, exist_ok=True)
 base = os.path.join(od, ps)
 fb.font.save(base + '.otf')
